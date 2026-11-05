@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "points": [
+    {
+      "id": "P001",
+      "kind": "ground",
+      "xyz": [
+        -20,
+        -15,
+        0
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 762.5,
+          "y": 712.5
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 537.5,
+          "y": 712.5
+        }
+      ]
+    },
+    {
+      "id": "P002",
+      "kind": "building",
+      "xyz": [
+        -14,
+        -15,
+        15
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 808.2758620689655,
+          "y": 724.1379310344828
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 560.0,
+          "y": 724.1379310344828
+        }
+      ]
+    },
+    {
+      "id": "P003",
+      "kind": "building",
+      "xyz": [
+        -8,
+        -15,
+        20
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 860.0,
+          "y": 728.5714285714286
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 602.8571428571429,
+          "y": 728.5714285714286
+        }
+      ]
+    },
+    {
+      "id": "P004",
+      "kind": "building",
+      "xyz": [
+        -2,
+        -15,
+        25
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 915.5555555555555,
+          "y": 733.3333333333334
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 648.8888888888889,
+          "y": 733.3333333333334
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "B001",
+      "point_ids": [
+        "P002",
+        "P003",
+        "P004"
+      ],
+      "closed": true
+    }
+  ],
+  "ground_reference": "P001"
+}

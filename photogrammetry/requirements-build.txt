@@ -1,0 +1,5 @@
+# Windows packaging and synthetic PNG regeneration only.
+# Running the source application requires Python's standard library only.
+Pillow==12.0.0
+PyInstaller==6.22.3
+pyinstaller-hooks-contrib==2026.8

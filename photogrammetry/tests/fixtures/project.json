@@ -1,0 +1,191 @@
+{
+  "name": "Synthetic test fixture",
+  "crs": "LOCAL_SYNTHETIC_METRES",
+  "axis_order": "E,N,H",
+  "height_reference": "가상 지면 H=0 m 기준 높이",
+  "camera": {
+    "width": 1600,
+    "height": 1200,
+    "focal_mm": 12.0,
+    "pixel_mm": 0.01,
+    "focal_px": 1200.0,
+    "cx": 800,
+    "cy": 600,
+    "principal_point_assumed": false,
+    "images_undistorted": true
+  },
+  "images": [
+    {
+      "id": "SYNTH_0",
+      "filename": "SYNTH_0.JPG",
+      "centre": [
+        -40,
+        0,
+        160
+      ],
+      "angles": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "SYNTH_A",
+      "filename": "SYNTH_A.JPG",
+      "centre": [
+        -15.0,
+        0.0,
+        160.0
+      ],
+      "angles": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "SYNTH_B",
+      "filename": "SYNTH_B.JPG",
+      "centre": [
+        15.0,
+        0.0,
+        160.0
+      ],
+      "angles": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "SYNTH_3",
+      "filename": "SYNTH_3.JPG",
+      "centre": [
+        40,
+        0,
+        160
+      ],
+      "angles": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "SYNTH_4",
+      "filename": "SYNTH_4.JPG",
+      "centre": [
+        60,
+        0,
+        160
+      ],
+      "angles": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "missing_images": 0,
+  "default_pair": [
+    "SYNTH_A",
+    "SYNTH_B"
+  ],
+  "max_save_reprojection_px": 5.0,
+  "guide_height_range": [
+    -100,
+    300
+  ],
+  "notes": "Synthetic test fixture; no classroom data.",
+  "origin": [
+    -40,
+    0,
+    160
+  ],
+  "pose_convention": "camera_to_world_RxRyRz"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "건국대학교 공간정보 수업 · 사진측량 실습 · 가상 예제",
+  "data_directory": "examples/synthetic",
+  "crs": "LOCAL_SYNTHETIC_METRES",
+  "coordinate_order": "E,N,H",
+  "horizontal_axes_note": "가상 로컬 좌표. 실제 촬영 위치 또는 지도 좌표와 관련 없음.",
+  "height_reference": "가상 지면 H=0 m 기준 높이",
+  "images_undistorted": true,
+  "principal_point": [
+    800,
+    600
+  ],
+  "pose_convention": "camera_to_world_RxRyRz",
+  "default_pair": [
+    "SYNTH_A",
+    "SYNTH_B"
+  ],
+  "guide_height_range": [
+    -20,
+    100
+  ],
+  "max_save_reprojection_px": 5.0,
+  "notes": "실제 드론사진이 아닌 수식으로 생성한 가상 예제입니다. 실제 촬영 위치·사진·표정요소를 포함하지 않습니다."
+}

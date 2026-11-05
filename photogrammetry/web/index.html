@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>사진측량 실습 · 드론사진으로 그리는 공간</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/spatial.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">⌖</span><h1>사진측량 실습</h1></div>
+    <div class="top-actions"><button id="infoBtn" class="quiet">자료 정보</button><button id="helpBtn" class="quiet">사용 방법</button><button id="exportBtn" class="outline">결과 내보내기 ↗</button></div>
+  </header>
+
+  <main>
+    <section class="session-bar">
+      <div class="mode-control" role="group" aria-label="실습 모드"><button id="groundMode" class="mode active">⌖ 지면 높이 찍기</button><button id="buildingMode" class="mode">▱ 건물 그리기</button></div>
+      <div id="buildingTools" class="building-tools hidden"><span id="draftLabel"></span><button id="closeBuilding" class="small">면 닫기</button><button id="finishBuilding" class="small">열린 선 마치기</button><button id="newBuilding" class="small">+ 새 건물</button></div>
+      <div id="coordinateBadge" class="crs-badge">자료 정보를 불러오는 중…</div>
+    </section>
+
+    <p id="dataNotice" class="data-notice hidden" role="status"></p>
+    <section class="workspace">
+      <div class="control-toolbar" role="group" aria-label="점 맞추기와 도화 설정">
+        <div id="methodControls" class="method-controls">
+          <div class="interaction-controls"><label>점 맞추기 <select id="pointMethod" aria-label="점 맞추기"><option value="stereo">A·B 각각 클릭</option><option value="guided">가이드 커서 조절</option></select></label></div>
+          <div id="groundTools" class="ground-tools"><button id="makeTerrain" class="small" disabled>지형 만들기</button><span id="terrainHint">지면 점 3개 이상 필요</span></div>
+          <div id="drawingControls" class="drawing-controls hidden"><label>건물 도화 <select id="drawingMethod" aria-label="건물 도화"><option value="vertices">모서리마다 맞추기</option><option value="height_locked">높이 유지하며 그리기</option></select></label></div>
+        </div>
+        <div id="drawingExtras" class="drawing-extras hidden"><label id="lockControls">유지 표고 <input id="lockedHeight" type="number" step="0.1" placeholder="첫 점에서 설정"> m</label><button id="useHeight" class="small">현재 점 높이 사용</button><button id="resetHeight" class="small">높이 다시 맞추기</button></div>
+        <div id="heightControls" class="height-controls hidden" title="휠: 확대·축소 / 드래그: 사진 이동 / B에서 Shift+휠·드래그: 높이 조절"><span>후보 표고</span><button id="heightDown" class="small" aria-label="후보 표고 낮추기">−</button><input id="guideHeight" type="number" step="0.1" aria-label="후보 표고"><span>m</span><button id="heightUp" class="small" aria-label="후보 표고 높이기">+</button><label>간격 <select id="heightStep"><option value="0.1">0.1 m</option><option value="0.5" selected>0.5 m</option><option value="1">1 m</option><option value="5">5 m</option></select></label></div>
+      </div>
+      <div class="drafting-column">
+      <div class="stereo-area">
+        <span id="interactionHint" class="visually-hidden">두 사진에서 같은 지점을 선택합니다.</span>
+        <div class="instructions"><span id="stepNumber">1</span><p id="stepText" aria-describedby="interactionHint">왼쪽 사진에서 높이를 알고 싶은 지점을 선택하세요.</p><button id="clearCandidate" class="text-button">선택 취소 <kbd>Esc</kbd></button></div>
+        <div class="stereo-pair">
+          <section class="viewer-card"><div class="viewer-head"><span class="side-tag">A</span><select id="leftImage" aria-label="왼쪽 사진 선택"></select><span class="viewer-resolution">8,192 × 5,460</span><button id="leftFit" class="icon-button" title="사진 전체 보기">⛶</button></div><div class="photo-stage"><canvas id="leftCanvas" aria-label="왼쪽 사진, 클릭으로 관측점 선택"></canvas><div id="leftLoading" class="image-loading">사진을 불러오는 중…</div><div class="photo-tools"><button id="leftPlus" aria-label="왼쪽 사진 확대">+</button><button id="leftMinus" aria-label="왼쪽 사진 축소">−</button><span id="leftZoom">맞춤</span></div><div class="photo-caption">휠로 확대 · 드래그로 이동</div></div><div class="observation-strip"><i class="point-dot"></i><span id="leftObs">선택한 점 없음</span></div></section>
+          <section class="viewer-card"><div class="viewer-head"><span class="side-tag">B</span><select id="rightImage" aria-label="오른쪽 사진 선택"></select><span class="viewer-resolution">8,192 × 5,460</span><button id="rightFit" class="icon-button" title="사진 전체 보기">⛶</button></div><div class="photo-stage"><canvas id="rightCanvas" aria-label="오른쪽 사진, 같은 지점을 클릭"></canvas><div id="rightLoading" class="image-loading">사진을 불러오는 중…</div><div class="photo-tools"><button id="rightPlus" aria-label="오른쪽 사진 확대">+</button><button id="rightMinus" aria-label="오른쪽 사진 축소">−</button><span id="rightZoom">맞춤</span></div><div class="photo-caption">주황색 선에서 같은 지점을 찾아보세요</div></div><div class="observation-strip"><i class="point-dot amber"></i><span id="rightObs">선택한 점 없음</span></div></section>
+        </div>
+        <div class="filmstrip"><span class="filmstrip-label"><span id="photoCount">사진 0장</span><br><small>좌클릭 A · 우클릭 B</small></span><div id="filmstripItems"></div></div>
+      </div>
+      <section class="results-grid">
+        <section class="points-card"><div class="section-head"><div><span class="panel-kicker">실습 기록</span><h2>측정한 점 <span id="pointCount" class="count">0</span></h2></div><span id="saveStatus" class="save-status">저장된 점 없음</span></div><div class="table-scroll"><table><thead><tr><th>점</th><th>구분</th><th>표고 (m)</th><th>일치도 (px)</th><th>생성 방식</th><th></th></tr></thead><tbody id="pointRows"></tbody></table><div id="pointsEmpty" class="points-empty">사진에서 점을 선택하고 ‘점 저장’을 눌러주세요.</div></div><div class="points-footer"><span id="recordSummary">지면 0점 · 건물 0개</span><button id="resetBtn" class="text-button">새 실습 시작</button></div></section>
+      </section>
+      </div>
+
+      <aside class="inspection-column">
+      <section id="modelCard" class="model-card" aria-label="3D 미리보기">
+        <div class="section-head"><div><span class="panel-kicker">높이와 공간을 함께 보기</span><h2>3D 미리보기</h2></div><div class="view-switch"><button id="isometricBtn" class="small active">입체</button><button id="topViewBtn" class="small">위에서</button><button id="modelFit" class="small" title="이동과 확대를 초기화하고 전체 보기">전체 보기</button><button id="expandModel" class="small" aria-expanded="false" title="3D 미리보기를 큰 화면으로 보기">크게</button></div></div>
+        <div class="model-stage"><canvas id="modelCanvas" aria-label="측정점, 지형과 건물 벽면의 3D 미리보기"></canvas><div id="modelEmpty" class="model-empty"><span>⌁</span><p>첫 점을 선택하면<br>이곳에 공간이 만들어집니다.</p></div><div class="model-caption">드래그: 회전 · Shift+드래그: 이동 · 휠: 확대</div></div>
+        <div class="model-options"><label><input id="showWalls" type="checkbox" checked> 벽면</label><label><input id="showRays" type="checkbox" checked> 시선·이동 경로</label><label><input id="showTerrain" type="checkbox" checked> 지형</label><label><input id="showContours" type="checkbox" checked> 등고선</label><label><input id="showPointNumbers" type="checkbox" checked> 점 번호</label></div>
+        <div class="model-options model-label-options"><label title="지붕의 표고와 건물의 공통 바닥까지의 수직 길이"><input id="showBuildingHeights" type="checkbox"> 건물 높이</label><label title="측정 지면점과 등고선의 표고"><input id="showTerrainHeights" type="checkbox"> 지형 높이</label><label class="contour-interval" for="contourInterval">등고선 간격 <input id="contourInterval" type="number" value="1" min="0.1" max="1000" step="0.1" inputmode="decimal"> m</label></div>
+        <div id="contourStatus" class="contour-status hidden" role="status"></div>
+        <div id="terrainStatus" class="terrain-status">지면 점을 찍고 ‘지형 만들기’를 누르세요.</div>
+        <div class="wall-controls"><select id="wallBuilding" aria-label="벽면 기준을 설정할 건물"></select><select id="wallGround" aria-label="선택한 건물의 기준 지면"></select></div><div id="rayLegend" class="ray-legend hidden"><span class="ray-a">A 시선</span><span class="ray-b">B 시선</span><span>점 주변 일부를 표시합니다.</span></div><div id="buildingSummary" class="model-footer">지면 점과 닫힌 건물이 있으면 벽면을 표시합니다.</div>
+      </section>
+      <section class="measurement-panel">
+        <div class="panel-kicker">선택한 지점</div><div class="result-heading"><h2 id="resultTitle">지면의 표고</h2><span id="qualityBadge" class="quality neutral">선택 대기</span></div>
+        <div class="height-result"><strong id="heightValue">—</strong><span>m</span></div><div class="height-caption">제공된 외부표정요소의 높이 기준</div>
+        <details class="measurement-details"><summary>좌표와 기준 지면</summary><dl class="coordinates"><div><dt>E · 동쪽 좌표</dt><dd id="easting">—</dd></div><div><dt>N · 북쪽 좌표</dt><dd id="northing">—</dd></div></dl>
+        <div class="reference-section"><label for="groundReference">높이 비교용 기준 지면</label><select id="groundReference" title="지형이 없거나 지형 범위 밖인 경우 선택한 기준 지면점과 비교합니다."><option value="">지면 점을 먼저 저장하세요</option></select><div class="relative-height"><span id="relativeHeightLabel">지형 / 기준 지면점과의 높이 차이</span><strong id="relativeHeight">—</strong></div></div>
+        </details><div class="quality-section"><div><span id="qualityLabel">사진과의 일치도</span><strong id="reprojection">—</strong></div><div class="method-result"><span>생성 방식</span><strong id="pointMethodValue">—</strong></div><p id="qualityText">두 사진에서 같은 지점을 선택하면 계산됩니다.</p></div>
+        <button id="savePoint" class="primary" disabled>지면 점 저장 <kbd>Enter</kbd></button><button id="undoBtn" class="undo">↶ 마지막 작업 되돌리기</button>
+      </section>
+      </aside>
+    </section>
+
+    <footer class="app-footer"><span>왜곡보정 영상 · 주점은 영상 중심으로 가정</span><span>사진 간 일치도는 절대 측량정확도를 뜻하지 않습니다.</span></footer>
+  </main>
+  <div id="toast" role="status" class="toast hidden"></div>
+
+  <dialog id="helpDialog"><div class="dialog-head"><h2>점 맞추기와 건물 그리기</h2><button class="dialog-close icon-button">×</button></div>
+    <ol class="help-steps"><li><strong>맞추는 방식을 선택하세요</strong><p>‘A·B 각각 클릭’은 두 사진에서 같은 지점을 선택합니다. ‘가이드 커서 조절’은 A를 선택한 뒤 B에서 Shift+휠·드래그로 커서를 맞춥니다. 표고와 3D 후보점이 함께 움직여요. 같은 지점에 맞으면 Enter로 저장합니다.</p></li><li><strong>높이를 유지하며 연속 도화하세요</strong><p>건물 그리기에서 ‘높이 유지하며 그리기’를 선택합니다. 첫 지붕 점을 A·B에서 맞춰 저장하면 그 높이가 유지됩니다. 이후 A에서 움직이면 B에도 커서가 보이고, A를 클릭할 때마다 꼭짓점이 저장됩니다. 높이가 달라지는 곳은 ‘높이 다시 맞추기’를 사용하세요.</p></li><li><strong>외곽선을 닫고 벽면을 확인하세요</strong><p>3점 이상에서 ‘면 닫기’를 누릅니다. 미리보기에서 건물과 기준 지면을 선택하면 지붕에서 지면까지 벽면을 표시합니다. 벽면은 지붕 외곽을 수직으로 연장한 단순 모형입니다.</p></li></ol>
+    <div class="help-tip">두 사진 모두 휠로 확대·축소하고 드래그로 사진을 이동합니다. B의 가이드 조절은 Shift+휠 또는 Shift+클릭·드래그입니다. 3D에서 위아래로 드래그하면 지면 아래에서도 올려다볼 수 있습니다. 지형과 벽면은 실제 앞뒤 위치에 따라 가려지며, 지형 아래로 나온 벽면은 아래쪽 시점에서 보입니다. 입체 버튼으로 기본 시점으로 돌아옵니다. Shift+드래그로 시점을 옮기며, ‘전체 보기’로 돌아옵니다. 시선은 후보점 주변 일부를 표시하며, 후보점은 A의 시선을 따라 움직입니다.</div><p class="help-tip">자료 폴더의 사진과 cam.txt·eo.txt 변경은 자동 반영됩니다. 사진 목록에서 좌클릭은 A, 우클릭은 B를 선택합니다. 지면 점을 세 개 이상 찍고 지형 만들기를 누르면 점 사이를 보간한 지형을 만듭니다. 지면 점 추가 후에는 지형 만들기를 다시 눌러 갱신합니다.</p><p class="help-tip">등고선은 생성한 지형에서 일정 높이마다 그립니다. 미리보기에서 간격을 바꾸고 지형과 별도로 표시할 수 있습니다. 건물 높이·지형 높이·점 번호도 각각 켜고 끕니다. ‘지붕 높이’는 표고, ‘벽면 길이’는 지붕에서 공통 바닥까지의 수직 길이입니다. 건물 범위와 겹치는 지형의 최저 높이를 모든 벽면의 바닥으로 사용하며, 겹치는 지형이 없으면 선택한 기준 지면 높이를 사용합니다.</p><p class="shortcuts"><kbd>Enter</kbd> 점 저장 <kbd>Esc</kbd> 선택 취소 <kbd>Ctrl</kbd> + <kbd>Z</kbd> 되돌리기 <kbd>F</kbd> 사진 전체 <kbd>↑</kbd><kbd>↓</kbd> 후보 표고 조절</p>
+    <p class="help-tip">후보점의 ΔH는 바로 아래 생성된 지형과의 높이 차이입니다. 지형이 없거나 범위 밖이면 선택한 기준 지면점과 비교하며, 표시 문구로 기준을 구분합니다. 지형을 숨겨도 높이 비교에는 생성된 지형을 사용합니다.</p>
+  </dialog>
+  <dialog id="infoDialog"><div class="dialog-head"><h2>불러온 자료</h2><button class="dialog-close icon-button">×</button></div><div id="projectInfo"></div><p><a id="licenseLink" class="hidden" href="/api/notices" target="_blank" rel="noopener">구성요소 라이선스</a></p><p class="info-note">Z는 사용자가 확인한 표고를 그대로 유지하며 별도의 지오이드 변환을 하지 않습니다. 알려진 점으로 검증하기 전에는 실습 결과로 사용하세요.</p></dialog>
+  <dialog id="exportDialog"><div class="dialog-head"><h2>실습 결과 내보내기</h2><button class="dialog-close icon-button">×</button></div><p>모든 좌표는 E(동쪽), N(북쪽), H(표고) 순서이며 단위는 m입니다.</p><div class="export-options"><button data-format="csv"><strong>측정점 CSV</strong><span>좌표 · 표고 · 관측 위치 · 사진 간 일치도</span></button><button data-format="dxf"><strong>3D 도화 DXF</strong><span>측정점과 건물 외곽선 · CAD에서 열기</span></button><button data-format="json"><strong>실습 기록 JSON</strong><span>관측값과 건물을 함께 저장 · 다시 불러오기 가능</span></button></div><label class="import-label">저장한 JSON 불러오기 <input id="importSession" type="file" accept=".json,application/json"></label><p class="info-note">프로그램은 원본 사진과 표정요소 파일을 수정하지 않습니다.</p></dialog>
+  <dialog id="resetDialog"><div class="dialog-head"><h2>새 실습을 시작할까요?</h2><button class="dialog-close icon-button">×</button></div><p>현재 점과 건물 기록이 비워집니다. 필요한 결과는 먼저 내보내세요. 시작 직후 ‘되돌리기’로 복원할 수 있습니다.</p><div class="dialog-actions"><button id="cancelReset" class="outline">취소</button><button id="confirmReset" class="primary">새 실습 시작</button></div></dialog>
+</body>
+</html>

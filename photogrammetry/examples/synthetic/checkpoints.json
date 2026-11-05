@@ -1,0 +1,145 @@
+{
+  "description": "Entirely synthetic pinhole ground truth, metres and pixels.",
+  "points": [
+    {
+      "label": "G1",
+      "xyz": [
+        -40,
+        -30,
+        0
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 612.5,
+          "y": 825.0
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 387.5,
+          "y": 825.0
+        }
+      ]
+    },
+    {
+      "label": "G2",
+      "xyz": [
+        35,
+        -30,
+        0
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 1175.0,
+          "y": 825.0
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 950.0,
+          "y": 825.0
+        }
+      ]
+    },
+    {
+      "label": "G3",
+      "xyz": [
+        -40,
+        35,
+        0
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 612.5,
+          "y": 337.5
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 387.5,
+          "y": 337.5
+        }
+      ]
+    },
+    {
+      "label": "R1",
+      "xyz": [
+        -22,
+        -16,
+        20
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 740.0,
+          "y": 737.1428571428571
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 482.85714285714283,
+          "y": 737.1428571428571
+        }
+      ]
+    },
+    {
+      "label": "R2",
+      "xyz": [
+        18,
+        -16,
+        20
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 1082.857142857143,
+          "y": 737.1428571428571
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 825.7142857142857,
+          "y": 737.1428571428571
+        }
+      ]
+    },
+    {
+      "label": "R3",
+      "xyz": [
+        18,
+        16,
+        20
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 1082.857142857143,
+          "y": 462.8571428571429
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 825.7142857142857,
+          "y": 462.8571428571429
+        }
+      ]
+    },
+    {
+      "label": "R4",
+      "xyz": [
+        -22,
+        16,
+        20
+      ],
+      "observations": [
+        {
+          "image_id": "SYNTH_A",
+          "x": 740.0,
+          "y": 462.8571428571429
+        },
+        {
+          "image_id": "SYNTH_B",
+          "x": 482.85714285714283,
+          "y": 462.8571428571429
+        }
+      ]
+    }
+  ]
+}

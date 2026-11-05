@@ -1,0 +1,3 @@
+PhotoID,X,Y,Z,Omega,Phi,Kappa
+SYNTH_A,-15.0,0.0,160.0,0,0,0
+SYNTH_B,15.0,0.0,160.0,0,0,0
